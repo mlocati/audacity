@@ -1,8 +1,17 @@
 #!/bin/sh
 
+# Used environment variables:
+# - AUDACITY_VERSION: the version of audacity the language files are for
+# - AUDACITY_ONLY_POT: if set to y, the script only updates the .pot file without touching the .po files
+
 set -o errexit
+set -o nounset
 
 CDPATH= cd -- "$(dirname -- "$0")"
+
+if [ -z "${AUDACITY_VERSION:-}" ]; then
+    AUDACITY_VERSION=3.0.3
+fi
 
 echo ";; Recreating audacity.pot using .h, .cpp and .mm files"
 for path in ../modules/mod-* ../libraries/lib-* ../include ../src ../crashreports ; do
@@ -18,7 +27,7 @@ done | LANG=c sort | \
    --add-location=file  \
    --copyright-holder='Audacity Team' \
    --package-name="audacity" \
-   --package-version='3.0.3' \
+   --package-version="$AUDACITY_VERSION" \
    --msgid-bugs-address="audacity-translation@lists.sourceforge.net" \
    --add-location=file -L C -o audacity.pot 
 
@@ -34,7 +43,7 @@ for path in ../plug-ins ; do find $path -name \*.ny -not -name rms.ny; done | LA
    --add-location=file  \
    --copyright-holder='Audacity Team' \
    --package-name="audacity" \
-   --package-version='3.0.3' \
+   --package-version="$AUDACITY_VERSION" \
    --msgid-bugs-address="audacity-translation@lists.sourceforge.net" \
    --add-location=file -L Lisp -j -o audacity.pot 
 
@@ -51,11 +60,11 @@ done | \
    --add-location=file  \
    --copyright-holder='Audacity Team' \
    --package-name="audacity" \
-   --package-version='3.0.3' \
+   --package-version="$AUDACITY_VERSION" \
    --msgid-bugs-address="audacity-translation@lists.sourceforge.net" \
    -j -o audacity.pot 
 
-if test "${AUDACITY_ONLY_POT:-}" = 'y'; then
+if [ "${AUDACITY_ONLY_POT:-}" = y ]; then
     return 0
 fi
 
@@ -67,7 +76,7 @@ done
 
 echo ";; Updating the .po files - Updating Project-Id-Version"
 for i in *.po; do
-    sed -i 's/^"Project-Id-Version:.*/"Project-Id-Version: audacity 3.0.3\\n"/' "$i"
+    sed -i "s/^\"Project-Id-Version:.*/\"Project-Id-Version: audacity $AUDACITY_VERSION\\\\n\"/" "$i"
 done
 
 echo ";; Updating the .po files"
