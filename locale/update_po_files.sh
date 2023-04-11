@@ -67,8 +67,7 @@ done
 
 echo ";; Updating the .po files - Updating Project-Id-Version"
 for i in *.po; do
-    sed -e '/^"Project-Id-Version:/c\
-    "Project-Id-Version: audacity 3.0.3\\n"' $i > TEMP; mv TEMP $i
+    sed -i 's/^"Project-Id-Version:.*/"Project-Id-Version: audacity 3.0.3\\n"/' "$i"
 done
 
 echo ";; Updating the .po files"
