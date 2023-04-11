@@ -76,7 +76,7 @@ done
 
 echo ';; Updating the .po files - Updating Project-Id-Version'
 for i in *.po; do
-    sed -i "s/^\"Project-Id-Version:.*/\"Project-Id-Version: audacity $AUDACITY_VERSION\\\\n\"/" "$i"
+    sed -i -r "s/^((\s*(msgstr\s+)?\"Project-Id-Version:).*?\\\\n)/\2 audacity $AUDACITY_VERSION\\\\n/" "$i"
 done
 
 echo ';; Updating the .po files'
