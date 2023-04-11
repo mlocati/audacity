@@ -59,6 +59,12 @@ if test "${AUDACITY_ONLY_POT:-}" = 'y'; then
     return 0
 fi
 
+echo ';; Rebuilding LINGUAS file'
+printf '' >LINGUAS
+for i in *.po; do
+   echo "${i%.po}" >>LINGUAS
+done
+
 echo ";; Updating the .po files - Updating Project-Id-Version"
 for i in *.po; do
     sed -e '/^"Project-Id-Version:/c\
