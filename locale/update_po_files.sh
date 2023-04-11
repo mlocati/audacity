@@ -29,7 +29,7 @@ done | LANG=c sort | \
    --package-name='audacity' \
    --package-version="$AUDACITY_VERSION" \
    --msgid-bugs-address='audacity-translation@lists.sourceforge.net' \
-   --add-location=file -L C -o audacity.pot 
+   --add-location=file -L C -o audacity.pot
 
 echo ';; Adding nyquist files to audacity.pot'
 for path in ../plug-ins ; do find $path -name \*.ny -not -name rms.ny; done | LANG=c sort | \
@@ -45,11 +45,11 @@ for path in ../plug-ins ; do find $path -name \*.ny -not -name rms.ny; done | LA
    --package-name='audacity' \
    --package-version="$AUDACITY_VERSION" \
    --msgid-bugs-address='audacity-translation@lists.sourceforge.net' \
-   --add-location=file -L Lisp -j -o audacity.pot 
+   --add-location=file -L Lisp -j -o audacity.pot
 
 echo ';; Adding resource files to audacity.pot'
-for path in ../resources ; do 
-   find $path -name \*.xml 
+for path in ../resources ; do
+   find $path -name \*.xml
 done | \
    sed -E 's/\.\.\///g' | \
    xargs xgettext \
@@ -62,7 +62,8 @@ done | \
    --package-name='audacity' \
    --package-version="$AUDACITY_VERSION" \
    --msgid-bugs-address='audacity-translation@lists.sourceforge.net' \
-   -j -o audacity.pot 
+   -j -o audacity.pot
+./normalize_po_file.sh audacity.pot
 
 if [ "${AUDACITY_ONLY_POT:-}" = y ]; then
     return 0
@@ -82,7 +83,7 @@ done
 echo ';; Updating the .po files'
 for i in *.po; do
    msgmerge --lang="${i%.po}" "$i" audacity.pot -o "$i"
-   msgmerge --no-wrap --lang="${i%.po}" "$i" audacity.pot -o "$i"
+   ./normalize_po_file.sh "$i"
 done
 
 echo ';; Removing '#~|' (which confuse Windows version of msgcat)'
