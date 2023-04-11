@@ -1,2 +1,8 @@
 # Normalize line endings of all files that Git considers to be text
 * text=auto
+
+# POSIX shell scripts must always have POSIX line endings, othwewise we have errors like
+# /bin/sh^M: bad interpreter: No such file or directory
+# For example, Windows users may checkout the repository on Windows and execute the
+# POSIX scripts in WSL
+*.sh text eol=lf
