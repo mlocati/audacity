@@ -72,8 +72,10 @@ for i in *.po; do
 done
 
 echo ";; Updating the .po files"
-sed 's/.*/echo "msgmerge --lang=& &.po audacity.pot -o &.po"; \
-msgmerge --no-wrap --lang=& &.po audacity.pot -o &.po;/g' LINGUAS | bash
+for i in *.po; do
+   msgmerge --lang="${i%.po}" "$i" audacity.pot -o "$i"
+   msgmerge --no-wrap --lang="${i%.po}" "$i" audacity.pot -o "$i"
+done
 
 echo ";; Removing '#~|' (which confuse Windows version of msgcat)"
 for i in *.po; do
